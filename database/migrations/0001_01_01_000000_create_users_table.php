@@ -17,15 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
-        });
-
-        Schema::create('profiles', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('bio')->nullable();
             $table->string('avatar')->nullable();
+            $table->text('bio')->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
 
