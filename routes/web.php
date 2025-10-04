@@ -13,5 +13,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
+// invite routes
+// Route::get('invite/accept/{token}', [\App\Http\Controllers\TeamInvitationController::class, 'accept'])->name('invite.accept');
+// Route::post('teams/{team}/invite', [\App\Http\Controllers\TeamInvitationController::class, 'invite'])->name('teams.invite')->middleware('auth');
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
