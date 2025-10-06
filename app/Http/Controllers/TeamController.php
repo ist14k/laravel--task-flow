@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TeamController extends Controller
 {
@@ -12,7 +13,11 @@ class TeamController extends Controller
      */
     public function index()
     {
-        //
+        $teams = Team::all();
+
+        return Inertia::render('teams/index', [
+            'teams' => $teams,
+        ]);
     }
 
     /**
@@ -36,7 +41,11 @@ class TeamController extends Controller
      */
     public function show(Team $team)
     {
-        //
+        $projects = $team->projects()->get();
+
+        return Inertia::render('teams/show', [
+            'projects' => $projects,
+        ]);
     }
 
     /**
