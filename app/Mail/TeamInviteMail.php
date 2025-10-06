@@ -36,7 +36,7 @@ class TeamInviteMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.team-invite',
             with: [
                 'url' => url('/invite/accept/'.$this->invitation->token),
                 'role' => $this->invitation->role,
