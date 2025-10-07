@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Board extends Model
 {
-    protected $fillable = ['project_id', 'name', 'position'];
+    use HasFactory;
+
+    protected $fillable = ['project_id', 'name', 'description', 'position'];
 
     public function project()
     {

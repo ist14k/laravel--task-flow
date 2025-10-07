@@ -22,6 +22,10 @@ class ProjectController extends Controller
      */
     public function show(Team $team, Project $project)
     {
+        $project->load('boards', 'boards.cards');
+
+        // dd($project->toArray());
+
         return Inertia::render('projects/show', [
             'project' => $project,
         ]);

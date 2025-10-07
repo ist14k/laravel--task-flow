@@ -22,6 +22,18 @@ Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show')
 // project routs
 Route::get('/teams/{team}/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
 
+// card routes
+Route::post('cards/move', function (\Illuminate\Http\Request $request) {
+    $request->validate([
+        'card_id' => 'required|exists:cards,id',
+        'new_board_id' => 'required|exists:boards,id',
+    ]);
+
+    $card = \App\Models\Card::find($request->card_id);
+    $card->board_id = $request->new_board_id;
+    $card->save();
+})->name('cards.move');
+
 // invite routes
 // Route::get('invite/accept/{token}', [\App\Http\Controllers\TeamInvitationController::class, 'accept'])->name('invite.accept');
 // Route::post('teams/{team}/invite', [\App\Http\Controllers\TeamInvitationController::class, 'invite'])->name('teams.invite')->middleware('auth');

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Board;
 use App\Models\Project;
 use App\Models\Team;
 use App\Models\User;
@@ -31,7 +32,14 @@ class DatabaseSeeder extends Seeder
             $team->members()->attach($team->owner_id, ['role' => 'owner']);
 
             // create 3-7 projects for each team
-            Project::factory(rand(3, 7))->create(['team_id' => $team->id]);
+            Project::factory(rand(3, 7))->create(['team_id' => $team->id])->each(function ($project) {
+                Board::factory(rand(2, 10))->create(['project_id' => $project->id])->each(function ($board) {
+                    // create 5-15 cards for each board
+                    \App\Models\Card::factory(rand(5, 10))->create([
+                        'board_id' => $board->id,
+                    ]);
+                });
+            });
         });
 
         User::firstOrCreate(
