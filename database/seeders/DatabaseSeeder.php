@@ -18,7 +18,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // create 10 users
-        $users = User::factory(10)->create();
+        $users = User::factory(50)->create([
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'two_factor_confirmed_at' => null,
+        ]);
 
         // create 5 teams with 2-5 random users and 3-7 projects each
         $teams = Team::factory(5)->create()->each(function ($team) use ($users) {
@@ -42,7 +48,7 @@ class DatabaseSeeder extends Seeder
             });
         });
 
-        User::firstOrCreate(
+        $testUser = User::firstOrCreate(
             ['email' => 'test@example.com'],
             [
                 'name' => 'Test User',
