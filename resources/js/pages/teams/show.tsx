@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -17,7 +18,7 @@ import {
 } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
-import { Link } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import { Calendar, FolderKanban, Plus } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
@@ -31,35 +32,33 @@ interface Project {
 }
 
 interface TeamShowProps {
-  projects: Project[];
   team: {
     id: number;
     name: string;
+    projects: Project[];
   };
 }
 
-function TeamShow({ projects }: TeamShowProps) {
+function TeamShow({ team }: TeamShowProps) {
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
+
+  const { data, setData, post, processing, errors, reset } = useForm({
     name: '',
     description: '',
+    is_private: false,
   });
-  const [errors] = useState<{ name?: string; description?: string }>({});
-  const [processing, setProcessing] = useState(false);
 
   const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
-    setProcessing(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Creating project:', formData);
-      setFormData({ name: '', description: '' });
-      setProcessing(false);
-      setOpen(false);
-    }, 1000);
+    post(`/teams/${team.id}/projects`, {
+      onSuccess: () => {
+        reset();
+        setOpen(false);
+      },
+    });
   };
 
-  const renderedProjects = projects.map((project) => (
+  const renderedProjects = team.projects.map((project) => (
     <Link
       key={project.id}
       href={`/teams/${project.team_id}/projects/${project.id}`}
@@ -111,15 +110,13 @@ function TeamShow({ projects }: TeamShowProps) {
                   Add a new project to {team.name}.
                 </SheetDescription> */}
               </SheetHeader>
-              <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+              <form onSubmit={handleSubmit} className="mt-6 space-y-6 p-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Project Name</Label>
                   <Input
                     id="name"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
+                    value={data.name}
+                    onChange={(e) => setData({ ...data, name: e.target.value })}
                     placeholder="Enter project name"
                     className={errors.name ? 'border-destructive' : ''}
                   />
@@ -131,9 +128,9 @@ function TeamShow({ projects }: TeamShowProps) {
                   <Label htmlFor="description">Description (Optional)</Label>
                   <Textarea
                     id="description"
-                    value={formData.description}
+                    value={data.description}
                     onChange={(e) =>
-                      setFormData({ ...formData, description: e.target.value })
+                      setData({ ...data, description: e.target.value })
                     }
                     placeholder="Enter project description"
                     rows={4}
@@ -145,6 +142,16 @@ function TeamShow({ projects }: TeamShowProps) {
                     </p>
                   )}
                 </div>
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={data.is_private}
+                    id="terms"
+                    onCheckedChange={(checked) =>
+                      setData({ ...data, is_private: Boolean(checked) })
+                    }
+                  />
+                  <Label htmlFor="terms">Accept terms and conditions</Label>
+                </div>
                 <Button type="submit" className="w-full" disabled={processing}>
                   {processing ? 'Creating...' : 'Create Project'}
                 </Button>
@@ -154,7 +161,7 @@ function TeamShow({ projects }: TeamShowProps) {
         </div>
 
         {/* Projects Grid */}
-        {projects.length > 0 ? (
+        {team.projects.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {renderedProjects}
           </div>

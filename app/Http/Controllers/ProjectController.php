@@ -12,9 +12,19 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Team $team)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255|min:3',
+            'description' => 'nullable|string|max:1000',
+            'is_private' => 'boolean',
+        ]);
+
+        $team->projects()->create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'is_private' => $request->is_private ?? false,
+        ]);
     }
 
     /**

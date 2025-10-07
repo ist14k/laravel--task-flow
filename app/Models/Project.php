@@ -10,6 +10,15 @@ class Project extends Model
     /** @use HasFactory<\Database\Factories\ProjectFactory> */
     use HasFactory;
 
+    protected $fillable = ['team_id', 'name', 'description', 'is_private'];
+
+    protected function casts(): array
+    {
+        return [
+            'is_private' => 'boolean',
+        ];
+    }
+
     public function team()
     {
         return $this->belongsTo(Team::class);

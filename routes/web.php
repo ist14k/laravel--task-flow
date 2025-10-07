@@ -22,6 +22,7 @@ Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show')
 
 // project routs
 Route::get('/teams/{team}/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+Route::post('/teams/{team}/projects', [ProjectController::class, 'store'])->name('projects.store');
 
 // card routes
 Route::post('cards/move', function (\Illuminate\Http\Request $request) {

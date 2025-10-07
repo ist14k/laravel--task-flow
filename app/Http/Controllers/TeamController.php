@@ -50,10 +50,9 @@ class TeamController extends Controller
      */
     public function show(Team $team)
     {
-        $projects = $team->projects()->get();
 
         return Inertia::render('teams/show', [
-            'projects' => $projects,
+            'team' => $team->load('projects'),
         ]);
     }
 
