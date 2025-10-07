@@ -13,7 +13,8 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::all();
+        // get all teams belonging to the authenticated user
+        $teams = request()->user()->teams()->get();
 
         return Inertia::render('teams/index', [
             'teams' => $teams,
@@ -33,7 +34,13 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        request()->user()->teams()->create([
+            'name' => $request->name,
+        ]);
     }
 
     /**
