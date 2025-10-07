@@ -159,25 +159,16 @@ function TeamShow({ projects }: TeamShowProps) {
             {renderedProjects}
           </div>
         ) : (
-          <Card className="w-full">
-            <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="mb-4 rounded-full bg-primary/10 p-6">
-                <FolderKanban className="h-12 w-12 text-primary" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">No projects yet</h3>
-              <p className="mb-6 max-w-md text-muted-foreground">
-                Get started by creating your first project for {team.name}
-              </p>
-              <Sheet open={open} onOpenChange={setOpen}>
-                <SheetTrigger asChild>
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create Your First Project
-                  </Button>
-                </SheetTrigger>
-              </Sheet>
-            </CardContent>
-          </Card>
+          <div className="flex flex-1 items-center justify-center">
+            <div className="space-y-3 text-center">
+              <FolderKanban className="mx-auto h-12 w-12 text-muted-foreground" />
+              <p className="text-muted-foreground">No projects yet</p>
+              <Button onClick={() => setOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                Create First Project
+              </Button>
+            </div>
+          </div>
         )}
       </div>
     </AppSidebarLayout>

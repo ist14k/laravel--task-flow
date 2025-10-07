@@ -17,6 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // teams route
 Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
+Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
 Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
 
 // project routs

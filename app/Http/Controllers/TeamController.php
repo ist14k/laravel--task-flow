@@ -35,12 +35,14 @@ class TeamController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|min:3',
         ]);
 
-        request()->user()->teams()->create([
+        $team = request()->user()->ownedTeams()->create([
             'name' => $request->name,
         ]);
+
+        $team->members()->attach(request()->user(), ['role' => 'owner']);
     }
 
     /**
