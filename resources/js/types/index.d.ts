@@ -84,8 +84,6 @@ export interface Board {
     position: number;
     created_at: string;
     updated_at: string;
-    project?: Project;
-    cards?: Card[];
 }
 
 export interface Card {
@@ -99,4 +97,8 @@ export interface Card {
     updated_at: string;
     board?: Board;
     assignedUser?: User;
+}
+
+export interface BoardWithCards extends Board {
+    cards: Card[];
 }

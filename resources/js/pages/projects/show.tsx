@@ -23,8 +23,6 @@ function ProjectShow({ project }: ProjectShowProps) {
     setCardSheetState(true);
   };
 
-  console.log('Local Project:', project);
-
   return (
     <AppHeaderLayout>
       <Head title={localProject.name} />
