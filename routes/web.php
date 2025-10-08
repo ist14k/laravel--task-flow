@@ -46,10 +46,13 @@ Route::post('/cards/new', function (\Illuminate\Http\Request $request) {
         'board_id' => 'required|exists:boards,id',
     ]);
 
+    $maxPosition = \App\Models\Card::where('board_id', $request->board_id)->max('position');
+
     $card = \App\Models\Card::create([
         'title' => $request->title,
         'description' => $request->description,
         'board_id' => $request->board_id,
+        'position' => is_null($maxPosition) ? 0 : $maxPosition + 1,
     ]);
 
     return $card->toArray();
