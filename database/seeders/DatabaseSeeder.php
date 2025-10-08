@@ -34,8 +34,12 @@ class DatabaseSeeder extends Seeder
             $team->members()->attach($team->owner_id, ['role' => 'owner']);
 
             Project::factory(rand(3, 7))->create(['team_id' => $team->id])->each(function ($project) {
-                Board::factory(rand(2, 10))->create(['project_id' => $project->id])->each(function ($board) {
-                    \App\Models\Card::factory(rand(5, 10))->create([
+                Board::factory(rand(2, 10))->sequence(function ($sequence) {
+                    return ['position' => $sequence->index + 1];
+                })->create(['project_id' => $project->id])->each(function ($board) {
+                    \App\Models\Card::factory(rand(5, 10))->sequence(
+                        fn ($sequence) => ['position' => $sequence->index + 1]
+                    )->create([
                         'board_id' => $board->id,
                     ]);
                 });
@@ -60,9 +64,13 @@ class DatabaseSeeder extends Seeder
             );
 
             Project::factory(rand(3, 7))->create(['team_id' => $team->id])->each(function ($project) {
-                Board::factory(3)->create(['project_id' => $project->id])->each(function ($board) {
+                Board::factory(3)->sequence(function ($sequence) {
+                    return ['position' => $sequence->index + 1];
+                })->create(['project_id' => $project->id])->each(function ($board) {
                     // create 5-15 cards for each board
-                    \App\Models\Card::factory(rand(2, 5))->create([
+                    \App\Models\Card::factory(rand(2, 5))->sequence(
+                        fn ($sequence) => ['position' => $sequence->index + 1]
+                    )->create([
                         'board_id' => $board->id,
                     ]);
                 });
