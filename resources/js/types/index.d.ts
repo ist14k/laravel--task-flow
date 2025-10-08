@@ -91,6 +91,7 @@ export interface Card {
     board_id: number;
     title: string;
     description?: string;
+    image?: string;
     position: number;
     assigned_to?: number;
     created_at: string;
