@@ -18,22 +18,44 @@ export default function BoardsContainer({
   onCreateCard,
 }: BoardsContainerProps) {
   return (
-    <div className="flex-1 overflow-x-auto">
-      <div className="flex min-h-4 items-start gap-4 p-6">
+    <div className="flex-1 overflow-x-auto overflow-y-hidden bg-background">
+      <div className="flex h-full items-start gap-3 p-4">
         <DndContext onDragEnd={onDragEnd}>
           {boards.map((board) => (
             <Board key={board.id} board={board} openCreateCard={onCreateCard} />
           ))}
         </DndContext>
+
+        {/* Add Board Button */}
+        {boards.length > 0 && (
+          <div className="flex w-72 flex-shrink-0">
+            <Button
+              variant="outline"
+              className="h-10 w-full justify-start border-dashed text-xs text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+              onClick={onAddBoard}
+            >
+              <Plus className="mr-1.5 h-3.5 w-3.5" />
+              Add Another Board
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Empty State */}
       {boards.length === 0 && (
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex h-full flex-1 items-center justify-center">
           <div className="space-y-3 text-center">
-            <p className="text-muted-foreground">No boards yet</p>
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+              <Plus className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-base font-semibold">No boards yet</h3>
+              <p className="max-w-sm text-xs text-muted-foreground">
+                Get started by creating your first board to organize your tasks
+              </p>
+            </div>
             <Button onClick={onAddBoard}>
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="mr-1.5 h-3.5 w-3.5" />
               Create First Board
             </Button>
           </div>
