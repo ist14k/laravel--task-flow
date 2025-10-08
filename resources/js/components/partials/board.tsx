@@ -1,16 +1,16 @@
+import type { Board, BoardWithCards } from '@/types';
 import { useDroppable } from '@dnd-kit/core';
 import { MoreVertical, Plus } from 'lucide-react';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import Card from './card';
 
-function Board({
-  board,
-  openCreateCard,
-}: {
-  board: Board;
+interface BoardProps {
+  board: BoardWithCards;
   openCreateCard: (boardId: number) => void;
-}) {
+}
+
+function Board({ board, openCreateCard }: BoardProps) {
   const { setNodeRef } = useDroppable({
     id: String(board.id),
   });
