@@ -24,8 +24,39 @@ Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show')
 Route::get('/teams/{team}/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
 Route::post('/teams/{team}/projects', [ProjectController::class, 'store'])->name('projects.store');
 
+// board routes
+Route::post('/projects/{project}/boards', function (\Illuminate\Http\Request $request, \App\Models\Project $project) {
+    $request->validate([
+        'name' => 'required|string|max:255|min:3',
+        'description' => 'nullable|string|max:1000',
+        'position' => 'nullable|integer',
+    ]);
+
+    $board = \App\Models\Board::create([
+        'name' => $request->name,
+        'project_id' => $project->id,
+    ]);
+})->name('boards.store');
+
 // card routes
-Route::post('cards/move', function (\Illuminate\Http\Request $request) {
+Route::post('/cards/new', function (\Illuminate\Http\Request $request) {
+    $request->validate([
+        'title' => 'required|string|max:255|min:3',
+        'description' => 'nullable|string|max:1000',
+        'board_id' => 'required|exists:boards,id',
+    ]);
+
+    $card = \App\Models\Card::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'board_id' => $request->board_id,
+    ]);
+
+    return $card->toArray();
+
+})->name('cards.store');
+
+Route::post('/cards/move', function (\Illuminate\Http\Request $request) {
     $request->validate([
         'card_id' => 'required|exists:cards,id',
         'new_board_id' => 'required|exists:boards,id',
