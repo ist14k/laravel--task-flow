@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // create 10 users
         $users = User::factory(50)->create([
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
@@ -26,21 +25,16 @@ class DatabaseSeeder extends Seeder
             'two_factor_confirmed_at' => null,
         ]);
 
-        // create 5 teams with 2-5 random users and 3-7 projects each
-        $teams = Team::factory(5)->create()->each(function ($team) use ($users) {
-            // attach 2-5 random users to each team
+        Team::factory(5)->create()->each(function ($team) use ($users) {
             $team->members()->attach(
                 $users->random(rand(2, 5))->pluck('id')->toArray(),
                 ['role' => 'member']
             );
 
-            // update the owner's role in the pivot table
             $team->members()->attach($team->owner_id, ['role' => 'owner']);
 
-            // create 3-7 projects for each team
             Project::factory(rand(3, 7))->create(['team_id' => $team->id])->each(function ($project) {
                 Board::factory(rand(2, 10))->create(['project_id' => $project->id])->each(function ($board) {
-                    // create 5-15 cards for each board
                     \App\Models\Card::factory(rand(5, 10))->create([
                         'board_id' => $board->id,
                     ]);
@@ -56,5 +50,23 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
+
+        Team::factory(3)->create(['owner_id' => $testUser->id])->each(function ($team) use ($testUser, $users) {
+            $team->members()->attach($testUser->id, ['role' => 'owner']);
+
+            $team->members()->attach(
+                $users->random(rand(2, 5))->pluck('id')->toArray(),
+                ['role' => 'member']
+            );
+
+            Project::factory(rand(3, 7))->create(['team_id' => $team->id])->each(function ($project) {
+                Board::factory(3)->create(['project_id' => $project->id])->each(function ($board) {
+                    // create 5-15 cards for each board
+                    \App\Models\Card::factory(rand(2, 5))->create([
+                        'board_id' => $board->id,
+                    ]);
+                });
+            });
+        });
     }
 }
