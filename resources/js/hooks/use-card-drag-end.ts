@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import type { Project } from '@/types/project';
+import type { Project, BoardWithCards } from '@/types/project';
+import type { Card } from '@/types';
 import { DragEndEvent } from '@dnd-kit/core';
 import { router } from '@inertiajs/react';
 
@@ -17,31 +18,47 @@ export const useCardDragEnd = (project: Project) => {
 
     // Optimistic update - immediately update UI
     setLocalProject((prevProject) => {
+      // First, find the card to move from all boards
+      let cardToMove: Card | null = null;
+
       const updatedBoards = (prevProject.boards || []).map((board) => {
-        // Remove card from old board
-        const filteredCards = (board.cards || []).filter(
-          (card) => card.id !== cardId,
-        );
-
-        // Add card to new board
-        if (board.id === newBoardId) {
-          const cardToMove = (prevProject.boards || [])
-            .flatMap((b) => b.cards || [])
-            .find((card) => card.id === cardId);
-
-          if (cardToMove) {
-            return {
-              ...board,
-              cards: [
-                ...filteredCards,
-                { ...cardToMove, board_id: newBoardId },
-              ],
-            };
+        const boardWithCards = board as BoardWithCards;
+        // Find and store the card before filtering
+        if (!cardToMove && boardWithCards.cards) {
+          const foundCard = boardWithCards.cards.find(
+            (card: Card) => card.id === cardId,
+          );
+          if (foundCard) {
+            cardToMove = foundCard;
           }
         }
 
-        return { ...board, cards: filteredCards };
+        // Remove card from all boards
+        return {
+          ...board,
+          cards: (boardWithCards.cards || []).filter((card: Card) => card.id !== cardId),
+        };
       });
+
+      // Add card to the new board
+      if (cardToMove) {
+        return {
+          ...prevProject,
+          boards: updatedBoards.map((board) => {
+            if (board.id === newBoardId) {
+              const boardWithCards = board as BoardWithCards;
+              return {
+                ...board,
+                cards: [
+                  ...(boardWithCards.cards || []),
+                  { ...cardToMove, board_id: newBoardId },
+                ],
+              };
+            }
+            return board;
+          }),
+        };
+      }
 
       return { ...prevProject, boards: updatedBoards };
     });

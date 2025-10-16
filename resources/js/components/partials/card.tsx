@@ -29,7 +29,7 @@ function Card({ data }: CardProps) {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className="group cursor-grab overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:scale-102 hover:border-cyan-300 hover:shadow-md active:scale-105 active:cursor-grabbing active:shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:hover:border-cyan-600"
+      className="group z-50 cursor-grab overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm hover:border-cyan-300 hover:shadow-md active:scale-105 active:cursor-grabbing active:shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:hover:border-cyan-600"
       style={style}
     >
       {/* Image placeholder - ready for future image implementation */}
