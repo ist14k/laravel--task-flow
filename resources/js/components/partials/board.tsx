@@ -24,17 +24,18 @@ function Board({ board, openCreateCard }: BoardProps) {
   return (
     <div
       key={board.id}
-      className="flex w-72 flex-shrink-0 flex-col rounded-lg border bg-muted/30 shadow-sm"
+      className="group flex w-80 flex-shrink-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md transition-all duration-300 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800"
     >
-      {/* Board Header */}
-      <div className="flex items-center justify-between rounded-t-lg border-b bg-background px-3 py-2">
-        <div className="flex items-center gap-2">
-          <h3 className="max-w-[180px] truncate text-xs font-semibold">
+      {/* Board Header with Gradient */}
+      <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 px-4 py-3 dark:border-slate-700 dark:from-cyan-900/30 dark:via-blue-900/30 dark:to-purple-900/30">
+        <div className="flex items-center gap-3">
+          <div className="h-2 w-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600"></div>
+          <h3 className="max-w-[200px] truncate text-sm font-bold text-gray-900 dark:text-white">
             {board.name}
           </h3>
           <Badge
             variant="secondary"
-            className="h-4 rounded-full px-1.5 text-[10px] font-medium"
+            className="h-6 rounded-full border-0 bg-gradient-to-r from-cyan-100 to-blue-100 px-2 text-xs font-semibold text-cyan-700 dark:from-cyan-900/50 dark:to-blue-900/50 dark:text-cyan-300"
           >
             {board.cards.length}
           </Badge>
@@ -44,9 +45,9 @@ function Board({ board, openCreateCard }: BoardProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6 hover:bg-muted"
+              className="h-8 w-8 transition-colors hover:bg-cyan-100 dark:hover:bg-slate-700"
             >
-              <MoreVertical className="h-3.5 w-3.5" />
+              <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -58,28 +59,30 @@ function Board({ board, openCreateCard }: BoardProps) {
         </DropdownMenu>
       </div>
 
-      {/* Cards List */}
-      <div className="flex-1 px-2 py-2">
-        <div ref={setNodeRef} className="min-h-[20px] space-y-2">
+      {/* Cards List with Custom Scrolling */}
+      <div className="min-h-[200px] flex-1 overflow-x-hidden overflow-y-auto bg-gradient-to-b from-white/50 to-cyan-50/30 px-3 py-3 dark:from-slate-800/50 dark:to-slate-900/30">
+        <div ref={setNodeRef} className="min-h-[20px] space-y-3">
           {board.cards.length > 0 ? (
             board.cards.map((card) => <Card key={card.id} data={card} />)
           ) : (
-            <div className="flex items-center justify-center py-6 text-center">
-              <p className="text-xs text-muted-foreground">No cards yet</p>
+            <div className="flex items-center justify-center py-8 text-center">
+              <p className="text-sm text-gray-400 dark:text-gray-500">
+                No cards yet
+              </p>
             </div>
           )}
         </div>
       </div>
 
       {/* Add Card Button */}
-      <div className="rounded-b-lg border-t bg-background px-2 py-1.5">
+      <div className="border-t border-gray-200 bg-gradient-to-r from-cyan-50/50 to-blue-50/50 px-3 py-2 dark:border-slate-700 dark:from-slate-800/50 dark:to-slate-900/50">
         <Button
           variant="ghost"
           size="sm"
-          className="h-7 w-full justify-start text-xs text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="h-9 w-full justify-start text-sm font-medium text-cyan-700 transition-colors hover:bg-cyan-100/50 dark:text-cyan-300 dark:hover:bg-slate-700"
           onClick={() => openCreateCard(board.id)}
         >
-          <Plus className="mr-1.5 h-3.5 w-3.5" />
+          <Plus className="mr-2 h-4 w-4" />
           Add Card
         </Button>
       </div>
