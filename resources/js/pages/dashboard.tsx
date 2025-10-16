@@ -15,7 +15,7 @@ export default function Dashboard() {
   return (
     <AppHeaderLayout breadcrumbs={breadcrumbs}>
       <Head title="Dashboard" />
-      <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-2xl bg-gradient-to-br from-slate-50 via-white to-blue-50 p-6 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-2xl bg-gradient-to-br from-slate-50 via-white to-blue-50 px-24 py-6 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
         {/* Header Section */}
         <div className="space-y-2">
           <h1 className="bg-gradient-to-r from-blue-600 via-cyan-600 to-purple-600 bg-clip-text text-4xl font-bold text-transparent">
